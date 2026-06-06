@@ -1,0 +1,98 @@
+erDiagram
+    USUARIO ||--o{ COSECHA : "registra"
+    PARCELA ||--o{ COSECHA : "produce"
+    PARCELA ||--o{ REGISTRO_TRABAJO : "recibe"
+    TRABAJADOR ||--o{ REGISTRO_TRABAJO : "realiza"
+    ACTIVIDAD ||--o{ REGISTRO_TRABAJO : "tipo"
+    CLIENTE ||--o{ VENTA : "compra"
+
+    USUARIO {
+        int      id            PK
+        string   username      UK
+        string   email
+        string   password_hash
+        string   rol
+        bool     is_active
+        datetime date_joined
+    }
+
+    PARCELA {
+        int      id              PK
+        string   nombre          UK
+        decimal  area_hectareas
+        bool     activa
+        text     notas
+        datetime created_at
+        datetime updated_at
+    }
+
+    COSECHA {
+        int      id                PK
+        int      parcela_id        FK
+        int      creado_por_id     FK
+        date     fecha
+        int      racimos_cortados
+        int      rejas_producidas
+        decimal  peso_kg
+        decimal  precio_kg
+        text     notas
+        datetime created_at
+        datetime updated_at
+    }
+
+    HISTORIAL_PRECIO {
+        int      id         PK
+        date     fecha      UK
+        decimal  precio_kg
+        text     notas
+        datetime created_at
+    }
+
+    TRABAJADOR {
+        int      id         PK
+        string   nombre
+        string   telefono
+        bool     activo
+        text     notas
+        datetime created_at
+        datetime updated_at
+    }
+
+    ACTIVIDAD {
+        int      id      PK
+        string   nombre  UK
+    }
+
+    REGISTRO_TRABAJO {
+        int      id             PK
+        int      trabajador_id  FK
+        int      parcela_id     FK
+        int      actividad_id   FK
+        date     fecha
+        decimal  pago
+        text     notas
+        datetime created_at
+    }
+
+    CLIENTE {
+        int      id             PK
+        string   nombre
+        string   telefono
+        string   direccion
+        text     observaciones
+        bool     activo
+        datetime created_at
+        datetime updated_at
+    }
+
+    VENTA {
+        int      id            PK
+        int      cliente_id    FK
+        date     fecha
+        decimal  peso_kg
+        decimal  precio_kg
+        decimal  monto_pagado
+        text     notas
+        datetime created_at
+        datetime updated_at
+    }
