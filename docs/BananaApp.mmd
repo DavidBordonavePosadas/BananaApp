@@ -1,10 +1,13 @@
 erDiagram
     USUARIO ||--o{ COSECHA : "registra"
+    USUARIO ||--o{ COMPRA_INSUMO : "registra"
+    USUARIO ||--o{ NOTA : "escribe"
     PARCELA ||--o{ COSECHA : "produce"
     PARCELA ||--o{ REGISTRO_TRABAJO : "recibe"
     TRABAJADOR ||--o{ REGISTRO_TRABAJO : "realiza"
     ACTIVIDAD ||--o{ REGISTRO_TRABAJO : "tipo"
     CLIENTE ||--o{ VENTA : "compra"
+    TIPO_INSUMO ||--o{ COMPRA_INSUMO : "clasifica"
 
     USUARIO {
         int      id            PK
@@ -86,13 +89,42 @@ erDiagram
     }
 
     VENTA {
-        int      id            PK
-        int      cliente_id    FK
+        int      id          PK
+        int      cliente_id  FK
         date     fecha
         decimal  peso_kg
         decimal  precio_kg
-        decimal  monto_pagado
         text     notas
+        datetime created_at
+        datetime updated_at
+    }
+
+    TIPO_INSUMO {
+        int      id      PK
+        string   nombre  UK
+        bool     activo
+    }
+
+    COMPRA_INSUMO {
+        int      id              PK
+        int      tipo_insumo_id  FK
+        int      creado_por_id   FK
+        date     fecha
+        decimal  cantidad
+        string   unidad
+        decimal  costo
+        string   proveedor
+        text     notas
+        datetime created_at
+        datetime updated_at
+    }
+
+    NOTA {
+        int      id             PK
+        int      creado_por_id  FK
+        date     fecha
+        string   titulo
+        text     contenido
         datetime created_at
         datetime updated_at
     }
