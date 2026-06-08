@@ -20,22 +20,26 @@ También es proyecto de portafolio profesional del desarrollador.
 1. Control de cosechas (parcelas + cosechas)
 2. Control de trabajadores y actividades
 3. Historial de precios
-4. Clientes y ventas
-5. Dashboard con métricas y gráficas
+4. Clientes y ventas (pago siempre al contado)
+5. Insumos (tipos de insumo + compras)
+6. Notas internas
+7. Dashboard con métricas y gráficas
 
 ## Modelo de datos
 
 Ver `docs/BananaApp.mmd` para el diagrama completo.
 
 Entidades: USUARIO, PARCELA, COSECHA, HISTORIAL_PRECIO, TRABAJADOR,
-ACTIVIDAD, REGISTRO_TRABAJO, CLIENTE, VENTA.
+ACTIVIDAD, REGISTRO_TRABAJO, CLIENTE, VENTA, TIPO_INSUMO, COMPRA_INSUMO, NOTA.
 
 Decisiones clave:
 - HISTORIAL_PRECIO sin FK (snapshot pattern)
-- total, total_estimado, estado_pago son calculados, no almacenados
+- total y total_estimado son calculados, no almacenados
+- VENTA: pago siempre al contado — sin monto_pagado ni estado_pago
 - ACTIVIDAD es tabla normalizada, no enum
 - parcela_id obligatorio en REGISTRO_TRABAJO
 - FKs con PROTECT, excepto parcela_id en REGISTRO_TRABAJO (SET_NULL)
+- TIPO_INSUMO precargado con 8 categorías base
 
 ## Estructura del monorepo
 
