@@ -5,7 +5,6 @@ from .models import Venta
 
 class VentaSerializer(serializers.ModelSerializer):
     total = serializers.ReadOnlyField()
-    estado_pago = serializers.ReadOnlyField()
 
     class Meta:
         model = Venta
