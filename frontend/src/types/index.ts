@@ -79,18 +79,44 @@ export interface Cliente {
   updated_at: string;
 }
 
-export type EstadoPago = "PENDIENTE" | "PARCIAL" | "PAGADO";
-
 export interface Venta {
   id: number;
   cliente: number;
   fecha: string;
   peso_kg: string;
   precio_kg: string;
-  monto_pagado: string;
   total: number;
-  estado_pago: EstadoPago;
   notas: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TipoInsumo {
+  id: number;
+  nombre: string;
+  activo: boolean;
+}
+
+export interface CompraInsumo {
+  id: number;
+  tipo_insumo: number;
+  creado_por: number;
+  fecha: string;
+  cantidad: string | null;
+  unidad: string;
+  costo: string;
+  proveedor: string;
+  notas: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Nota {
+  id: number;
+  creado_por: number;
+  fecha: string;
+  titulo: string;
+  contenido: string;
   created_at: string;
   updated_at: string;
 }
