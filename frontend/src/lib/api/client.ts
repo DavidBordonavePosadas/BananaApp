@@ -70,12 +70,35 @@ async function request<T>(
   }
 
   if (!res.ok) {
-    const error = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new Error(JSON.stringify(error));
+    const body = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new ApiError(res.status, body);
   }
 
   if (res.status === 204) return undefined as T;
   return res.json() as Promise<T>;
+}
+
+export class ApiError extends Error {
+  status: number;
+  body: Record<string, unknown>;
+
+  constructor(status: number, body: Record<string, unknown>) {
+    super(JSON.stringify(body));
+    this.status = status;
+    this.body = body;
+  }
+}
+
+export function parseApiError(err: unknown): Record<string, unknown> {
+  if (err instanceof ApiError) return err.body;
+  if (err instanceof Error) {
+    try {
+      return JSON.parse(err.message);
+    } catch {
+      return { detail: err.message };
+    }
+  }
+  return { detail: "Ocurrió un error inesperado." };
 }
 
 export const api = {

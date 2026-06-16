@@ -42,6 +42,29 @@ export interface HistorialPrecio {
   created_at: string;
 }
 
+export interface PrecioExtremo {
+  precio_kg: string;
+  fecha: string;
+}
+
+export interface EstadisticasPrecios {
+  total: number;
+  promedio: string | null;
+  maximo: PrecioExtremo | null;
+  minimo: PrecioExtremo | null;
+}
+
+export interface TendenciaMensualItem {
+  mes: number;
+  promedio: string | null;
+}
+
+export interface ComparacionPeriodos {
+  periodo_1: EstadisticasPrecios;
+  periodo_2: EstadisticasPrecios;
+  diferencia_porcentual: string | null;
+}
+
 export interface Trabajador {
   id: number;
   nombre: string;
