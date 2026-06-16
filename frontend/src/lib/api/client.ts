@@ -1,4 +1,5 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const REFRESH_TOKEN_KEY = "banana_refresh_token";
 
 let accessToken: string | null = null;
 
@@ -6,14 +7,36 @@ export function setAccessToken(token: string | null) {
   accessToken = token;
 }
 
-async function refreshAccessToken(): Promise<string | null> {
+export function getRefreshToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(REFRESH_TOKEN_KEY);
+}
+
+export function setRefreshToken(token: string | null) {
+  if (typeof window === "undefined") return;
+  if (token) {
+    localStorage.setItem(REFRESH_TOKEN_KEY, token);
+  } else {
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
+  }
+}
+
+export async function refreshAccessToken(): Promise<string | null> {
+  const refresh = getRefreshToken();
+  if (!refresh) return null;
+
   const res = await fetch(`${BASE_URL}/api/token/refresh/`, {
     method: "POST",
-    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ refresh }),
   });
-  if (!res.ok) return null;
+  if (!res.ok) {
+    setRefreshToken(null);
+    return null;
+  }
   const data = await res.json();
   accessToken = data.access as string;
+  if (data.refresh) setRefreshToken(data.refresh as string);
   return accessToken;
 }
 
@@ -33,7 +56,6 @@ async function request<T>(
   let res = await fetch(`${BASE_URL}${path}`, {
     ...options,
     headers,
-    credentials: "include",
   });
 
   if (res.status === 401 && accessToken) {
@@ -43,7 +65,6 @@ async function request<T>(
       res = await fetch(`${BASE_URL}${path}`, {
         ...options,
         headers,
-        credentials: "include",
       });
     }
   }
